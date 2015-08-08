@@ -1,0 +1,105 @@
+[2015-07-24T18:07:36,386Z] [INFO ] [SagImport] - importing table OELVISKOSITAET from system PRH
+[2015-07-24T18:07:36,386Z] [INFO ] [SagImport] - importing table PARTARTZUWEIS from system PRH
+[2015-07-24T18:07:36,386Z] [INFO ] [SagImport] - importing table FIRMA from system PRH
+[2015-07-24T18:07:36,386Z] [INFO ] [SagImport] - importing table PARTARTPREIS from system PRH
+[2015-07-24T18:07:36,386Z] [INFO ] [SagImport] - importing table TYPGEBIET from system PRH
+[2015-07-24T18:07:36,386Z] [INFO ] [SagImport] - importing table ARTIKELSET from system PRH
+[2015-07-24T18:07:36,386Z] [INFO ] [SagImport] - importing table PARTNER from system PRH
+[2015-07-24T18:07:36,386Z] [INFO ] [SagImport] - importing table WAEHRUNG from system PRH
+[2015-07-24T18:07:36,386Z] [INFO ] [SagImport] - importing table SUCHKRIBEZ from system PRH
+[2015-07-24T18:07:36,386Z] [INFO ] [SagImport] - importing table SPRACHTYP from system PRH
+[2015-07-24T18:07:36,386Z] [INFO ] [SagImport] - importing table ARTISPERRE from system PRH
+[2015-07-24T18:07:36,386Z] [INFO ] [SagImport] - importing table OELAPI from system PRH
+[2015-07-24T18:07:36,547Z] [INFO ] [SagImportMain$] - importing table: PREISART
+[2015-07-24T18:07:36,547Z] [INFO ] [SagImport] - importing table PREISART from system PRH
+[2015-07-24T18:07:36,549Z] [INFO ] [SagImportMain$] - importing table: SPRACHTYPTXT
+[2015-07-24T18:07:36,551Z] [INFO ] [SagImportMain$] - importing table: TEXTTYP
+[2015-07-24T18:07:36,552Z] [INFO ] [SagImport] - importing table SPRACHTYPTXT from system PRH
+[2015-07-24T18:07:36,553Z] [INFO ] [SagImport] - importing table TEXTTYP from system PRH
+[2015-07-24T18:07:36,555Z] [INFO ] [SagImportMain$] - importing table: ARTEINKPREIS
+[2015-07-24T18:07:36,563Z] [INFO ] [SagImport] - importing table ARTEINKPREIS from system PRH
+[2015-07-24T18:07:36,583Z] [INFO ] [SagImportMain$] - importing table: DEP_HISTORY
+[2015-07-24T18:07:36,583Z] [INFO ] [SagImport] - importing table DEP_HISTORY from system PRH
+[2015-07-24T18:07:36,766Z] [INFO ] [SagImportMain$] - importing table: ARTISPERREGEL
+[2015-07-24T18:07:36,766Z] [INFO ] [SagImport] - importing table ARTISPERREGEL from system PRH
+[2015-07-24T18:07:36,778Z] [INFO ] [SagImportMain$] - importing table: OELHERSTELLERFREIGABE
+[2015-07-24T18:07:36,778Z] [INFO ] [SagImport] - importing table OELHERSTELLERFREIGABE from system PRH
+[2015-07-24T18:07:37,082Z] [INFO ] [SagImportMain$] - importing table: PREIS
+[2015-07-24T18:07:37,083Z] [INFO ] [SagImport] - importing table PREIS from system PRH
+[2015-07-24T18:07:37,543Z] [INFO ] [SagImportMain$] - importing table: ORGANISATION
+[2015-07-24T18:07:37,543Z] [INFO ] [SagImport] - importing table ORGANISATION from system PRH
+[2015-07-24T18:07:37,543Z] [INFO ] [SagImportMain$] - importing table: OELACEA
+[2015-07-24T18:07:37,543Z] [INFO ] [SagImport] - importing table OELACEA from system PRH
+[2015-07-24T18:07:38,991Z] [INFO ] [SagImportMain$] - importing table: FZARTIKELNR
+[2015-07-24T18:07:38,991Z] [INFO ] [SagImport] - importing table FZARTIKELNR from system PRH
+[2015-07-24T18:07:38,993Z] [INFO ] [SagImportMain$] - importing table: TYPGEBTXT
+[2015-07-24T18:07:38,993Z] [INFO ] [SagImport] - importing table TYPGEBTXT from system PRH
+[2015-07-24T18:07:38,995Z] [INFO ] [SagImportMain$] - importing table: TTYPTXT
+[2015-07-24T18:07:38,995Z] [INFO ] [SagImport] - importing table TTYPTXT from system PRH
+[2015-07-24T18:07:44,699Z] [INFO ] [SagImportMain$] - importing table: LANDCODE
+[2015-07-24T18:07:44,700Z] [INFO ] [SagImport] - importing table LANDCODE from system PRH
+[2015-07-24T18:07:48,337Z] [INFO ] [SagImportMain$] - importing table: ZOLLKONKLIST
+[2015-07-24T18:07:48,337Z] [INFO ] [SagImport] - importing table ZOLLKONKLIST from system PRH
+[2015-07-24T18:07:48,359Z] [INFO ] [SagImportMain$] - importing table: SPERRE
+[2015-07-24T18:07:48,360Z] [INFO ] [SagImport] - importing table SPERRE from system PRH
+[2015-07-24T18:07:48,360Z] [INFO ] [SagImportMain$] - importing table: PARTFUNKVERB
+[2015-07-24T18:07:48,360Z] [INFO ] [SagImport] - importing table PARTFUNKVERB from system PRH
+[2015-07-24T18:07:48,798Z] [INFO ] [SagImportMain$] - importing table: ARTSORTTYP
+[2015-07-24T18:07:48,798Z] [INFO ] [SagImport] - importing table ARTSORTTYP from system PRH
+[2015-07-24T18:07:48,798Z] [INFO ] [SagImportMain$] - importing table: ARTISPERREGDETAIL
+[2015-07-24T18:07:48,798Z] [INFO ] [SagImport] - importing table ARTISPERREGDETAIL from system PRH
+[2015-07-24T18:07:48,803Z] [INFO ] [SagImportMain$] - importing table: MASSEINHBEZ
+[2015-07-24T18:07:48,803Z] [INFO ] [SagImport] - importing table MASSEINHBEZ from system PRH
+[2015-07-24T18:07:48,868Z] [INFO ] [SagImportMain$] - importing table: OELEURONORM
+[2015-07-24T18:07:48,868Z] [INFO ] [SagImport] - importing table OELEURONORM from system PRH
+[2015-07-24T18:07:48,907Z] [INFO ] [SagImportMain$] - importing table: WAEHRUNGSBEZ
+[2015-07-24T18:07:48,907Z] [INFO ] [SagImport] - importing table WAEHRUNGSBEZ from system PRH
+[2015-07-24T18:07:48,924Z] [INFO ] [SagImportMain$] - importing table: SUCHKRITERIUM
+[2015-07-24T18:07:48,924Z] [INFO ] [SagImport] - importing table SUCHKRITERIUM from system PRH
+[2015-07-24T18:07:48,975Z] [INFO ] [SagImportMain$] - importing table: OELATTRIBUT
+[2015-07-24T18:07:48,975Z] [INFO ] [SagImport] - importing table OELATTRIBUT from system PRH
+[2015-07-24T18:07:48,978Z] [INFO ] [SagImportMain$] - importing table: PARTARTGRP
+[2015-07-24T18:07:48,978Z] [INFO ] [SagImport] - importing table PARTARTGRP from system PRH
+[2015-07-24T18:07:49,023Z] [INFO ] [SagImportMain$] - importing table: DISPONENT
+[2015-07-24T18:07:49,023Z] [INFO ] [SagImport] - importing table DISPONENT from system PRH
+[2015-07-24T18:07:49,064Z] [INFO ] [SagImportMain$] - importing table: DGRPWERTZUWEIS
+[2015-07-24T18:07:49,064Z] [INFO ] [SagImport] - importing table DGRPWERTZUWEIS from system PRH
+[2015-07-24T18:07:36,546Z] [INFO ] [SagImport] - successfully inserted 0 datasets into OELAPI
+[2015-07-24T18:07:36,547Z] [INFO ] [SagImport] - successfully inserted 0 datasets into SUCHKRIBEZ
+[2015-07-24T18:07:36,548Z] [INFO ] [SagImport] - successfully inserted 1 datasets into FIRMA
+[2015-07-24T18:07:36,549Z] [INFO ] [SagImport] - successfully inserted 0 datasets into OELVISKOSITAET
+[2015-07-24T18:07:36,552Z] [INFO ] [SagImport] - successfully inserted 2 datasets into PARTARTZUWEIS
+[2015-07-24T18:07:36,583Z] [INFO ] [SagImport] - successfully inserted 7 datasets into SPRACHTYP
+[2015-07-24T18:07:36,763Z] [INFO ] [SagImport] - successfully inserted 13 datasets into WAEHRUNG
+[2015-07-24T18:07:36,765Z] [INFO ] [SagImport] - successfully inserted 49 datasets into SPRACHTYPTXT
+[2015-07-24T18:07:36,772Z] [INFO ] [SagImport] - successfully inserted 64 datasets into PREISART
+[2015-07-24T18:07:37,082Z] [INFO ] [SagImport] - successfully inserted 323 datasets into TYPGEBIET
+[2015-07-24T18:07:37,543Z] [INFO ] [SagImport] - successfully inserted 458 datasets into ARTISPERREGEL
+[2015-07-24T18:07:37,543Z] [INFO ] [SagImport] - successfully inserted 0 datasets into OELHERSTELLERFREIGABE
+[2015-07-24T18:07:38,972Z] [INFO ] [SagImport] - successfully inserted 3527 datasets into TEXTTYP
+[2015-07-24T18:07:38,990Z] [INFO ] [SagImport] - successfully inserted 8 datasets into ORGANISATION
+[2015-07-24T18:07:38,991Z] [INFO ] [SagImport] - successfully inserted 0 datasets into OELACEA
+[2015-07-24T18:07:38,993Z] [INFO ] [SagImport] - successfully inserted 0 datasets into FZARTIKELNR
+[2015-07-24T18:07:48,337Z] [INFO ] [SagImport] - successfully inserted 20872 datasets into TTYPTXT
+[2015-07-24T18:07:48,359Z] [INFO ] [SagImport] - successfully inserted 44 datasets into LANDCODE
+[2015-07-24T18:07:48,360Z] [INFO ] [SagImport] - successfully inserted 0 datasets into ZOLLKONKLIST
+[2015-07-24T18:07:48,797Z] [INFO ] [SagImport] - successfully inserted 48 datasets into SPERRE
+[2015-07-24T18:07:48,797Z] [INFO ] [SagImport] - successfully inserted 1120 datasets into PARTFUNKVERB
+[2015-07-24T18:07:48,802Z] [INFO ] [SagImport] - successfully inserted 0 datasets into ARTSORTTYP
+[2015-07-24T18:07:48,868Z] [INFO ] [SagImport] - successfully inserted 26615 datasets into ARTIKELSET
+[2015-07-24T18:07:48,907Z] [INFO ] [SagImport] - successfully inserted 94 datasets into MASSEINHBEZ
+[2015-07-24T18:07:48,907Z] [INFO ] [SagImport] - successfully inserted 0 datasets into OELEURONORM
+[2015-07-24T18:07:48,924Z] [INFO ] [SagImport] - successfully inserted 27 datasets into WAEHRUNGSBEZ
+[2015-07-24T18:07:48,975Z] [INFO ] [SagImport] - successfully inserted 132 datasets into SUCHKRITERIUM
+[2015-07-24T18:07:48,977Z] [INFO ] [SagImport] - successfully inserted 0 datasets into OELATTRIBUT
+[2015-07-24T18:07:49,023Z] [INFO ] [SagImport] - successfully inserted 101 datasets into PARTARTGRP
+[2015-07-24T18:07:49,064Z] [INFO ] [SagImport] - successfully inserted 122 datasets into DISPONENT
+[2015-07-24T18:07:49,076Z] [INFO ] [SagImport] - successfully inserted 25 datasets into DGRPWERTZUWEIS
+[2015-07-24T18:07:49,360Z] [INFO ] [SagImport] - successfully inserted 1460 datasets into ARTISPERREGDETAIL
+[2015-07-24T18:07:58,634Z] [INFO ] [SagImport] - successfully inserted 35823 datasets into DEP_HISTORY
+[2015-07-24T18:08:11,824Z] [INFO ] [SagImport] - successfully inserted 93458 datasets into ARTEINKPREIS
+[2015-07-24T18:09:52,950Z] [INFO ] [SagImport] - successfully inserted 33627 datasets into PARTNER
+[2015-07-24T18:13:12,771Z] [INFO ] [SagImport] - successfully inserted 685208 datasets into PREIS
+[2015-07-24T18:13:43,432Z] [INFO ] [SagImport] - successfully inserted 902649 datasets into PARTARTPREIS
+[2015-07-24T18:28:53,347Z] [INFO ] [SagImport] - successfully inserted 4109932 datasets into ARTISPERRE
+[2015-07-24T19:19:04,176Z] [INFO ] [SagImport] - successfully inserted 0 datasets into TYPGEBTXT

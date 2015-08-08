@@ -1,0 +1,7 @@
+### cutting corners
+
+I was a tester for The New Tetris on the N64. There was a crash that I could reproduce every time, which would display a dump of the registers just before locking up. You had to power cycle the N64 to get it to go away: even the reset key was unresponsive.
+
+Version after version, the developer said the bug was fixed, and version after version I reproduced it. Closing in on the shipping deadline, the developer had to close out all crashing bugs in order to ship. (Testing is done by Nintendo even on third-party games, and Nintendo has to approve it.) But this bug would just not go away.
+
+The game also had some unrelated secret codes you could enter to unlock various things. One day I joked that the developer should replace the hex dump screen with a screen that says "Congratulations! You have discovered a secret code! Turn your console off and back on, then enter the username HALUCI." So he did. And that's how it shipped.
