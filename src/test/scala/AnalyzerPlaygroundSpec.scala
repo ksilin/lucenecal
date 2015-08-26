@@ -65,7 +65,6 @@ class AnalyzerPlaygroundSpec extends FunSpec with Matchers {
         }
       }
     }
-    // TODO - try EnglishAnalyzer, GermanAnalyzer
   }
 
 }
