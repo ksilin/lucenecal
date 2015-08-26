@@ -28,7 +28,7 @@ class AnalyzerPlaygroundSpec extends FunSpec with Matchers {
         }
       }
     }
-    
+
     it("should tokenize text dropping german stopwords") {
       for {
         anaEn <- managed(new EnglishAnalyzer())
