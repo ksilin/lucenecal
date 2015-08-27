@@ -2,6 +2,7 @@ package com.example
 
 import java.nio.file.{Files, Path}
 import java.time.Instant
+import java.util
 
 import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.analysis.standard.StandardAnalyzer
@@ -32,7 +33,9 @@ object Lucenecul extends Logging {
 
   def toDocument(event: LogEvent): Document = {
     val doc: Document = new Document()
+    // stringfield does not count frequencies and position (would always be 1 and 0)
     doc.add(new StringField("id", "doc_" + System.nanoTime(), Field.Store.YES))
+    // TODO - how to store and query dates (and perhaps other non-string types like numbers or locations)
     doc.add(new TextField("level", event.level, Field.Store.YES))
     doc.add(new TextField("content", event.message, Store.YES))
     doc
@@ -77,19 +80,15 @@ object Lucenecul extends Logging {
 
     // if you give it an IndexWriter instead of directory, you get an NRT reader
     // so you dont have to to call close on the writer to receive fresh docs
-    val reader: IndexReader = DirectoryReader.open(dir) //FSDirectory.open(Paths.get(PATH_TO_INDEX)))
+    val reader: IndexReader = DirectoryReader.open(dir)
     // LeafReader or CompositeREader
     // most interesting stuff is contained in the LeafReader
 
 
-    // pst is the actual index (postings)
-    // stringfield does not count frequencies and position (would always be 1 and 0)
-
     // you can also pass a Thread pool
     val searcher: IndexSearcher = new IndexSearcher(reader)
 
-    // indexing and serach analyzers have to match in order to find relevant stff
-
+    // indexing and serach analyzers have to match sufficiently in order to find relevant results
     val analyzer: Analyzer = new StandardAnalyzer()
 
     // StandardQueryParser is the new one, ClassicQueryParser is the old one
@@ -100,8 +99,8 @@ object Lucenecul extends Logging {
     // default is false
     parser.setLowercaseExpandedTerms(true)
 
-    // things we missed - faceting, ighlighting, explaining
-    // scores of a query are unique to this query and are not comparable between queries
+    // things we are missing yet - faceting, ighlighting, explaining
+
 
 
     val query: Query = parser.parse(field + ":" + value)
@@ -113,7 +112,8 @@ object Lucenecul extends Logging {
 //    println(explain.getValue)
     // TODO - what do I do with the details?
 //    println(explain.getDetails)
-    println(explain.toString)
+    log.info(" --- scores of a query are unique to this query and are not comparable between queries --- ")
+    log.info(explain.toString)
 
     val numTotalHits = results.totalHits
     log.info(numTotalHits + " total matching documents")
@@ -132,10 +132,6 @@ object Lucenecul extends Logging {
     // you can also pass a Thread pool
     val searcher: IndexSearcher = new IndexSearcher(reader)
 
-    // TODO - what can we get from those?
-    val mergedFieldInfos: FieldInfos = MultiFields.getMergedFieldInfos(reader)
-
-
     // WildcardQuery - runs through teh terms, and rewrites itself in terms of the matches as a BooleanQuery
     // leading wildcard is expensive because it has to traverse everyting
     // leading wildcards are so expensive that there is an extras setting of that - setAllwoLeadingWildcard
@@ -145,6 +141,22 @@ object Lucenecul extends Logging {
       val dc: Document = searcher.doc(d.doc)
       println(dc.getField("content"))
     }
+  }
+
+  def printlReaderDetails() = {
+
+    import scala.collection.JavaConversions._
+
+    val reader: IndexReader = DirectoryReader.open(dir) //FSDirectory.open(Paths.get(PATH_TO_INDEX)))
+
+    // TODO - what can we get from those?
+    val mergedFieldInfos: FieldInfos = MultiFields.getMergedFieldInfos(reader)
+    mergedFieldInfos.iterator foreach {fi => println(s"${fi.name}")}
+
+    // same strings as in FieldInfo.name
+    val iterator: util.Iterator[String] = MultiFields.getFields(reader).iterator()
+    iterator foreach println
+
   }
 
 }

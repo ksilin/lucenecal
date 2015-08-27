@@ -23,6 +23,7 @@ class LuceneculSpec extends FunSpec with Matchers {
       val dirFiles: Array[String] = dir.listAll()
 
       dirFiles.size shouldBe 7
+      // pst is the actual index (postings)
       val expected = List("_0.len", "_0.pst", "_0.inf", "_0.si", "write.lock", "_0.fld", "segments_1")
       dirFiles should contain theSameElementsAs(expected)
     }
@@ -39,10 +40,18 @@ class LuceneculSpec extends FunSpec with Matchers {
       val results: Unit = Lucenecul.searchTerm("content", "milk")
     }
 
+
+    it("should print reader details") {
+      Lucenecul.printlReaderDetails()
+    }
+
     it("should parse dates") {
       val instant: Instant = Instant.parse("2015-07-24T18:07:36.766Z")
       println(instant.toString)
     }
+
+
+
   }
 
 
