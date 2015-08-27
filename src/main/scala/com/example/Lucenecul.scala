@@ -19,16 +19,20 @@ import org.apache.lucene.store.{Directory, FSDirectory}
 import scala.collection.GenTraversableOnce
 import scala.io.Source
 import scalaj.http.Http
+import scala.collection.JavaConversions._
 
 case class LogEvent(val eventTime: Instant, val level: String, val message: String)
 
+// TODO things we are missing yet - faceting, highlighting
 object Lucenecul extends Logging {
 
   private val tempDir: Path = Files.createTempDirectory("lucene_")
-  val dir: Directory = FSDirectory.open(tempDir) // new RAMDirectory()
+  val dir: Directory = FSDirectory.open(tempDir)
+  // new RAMDirectory()
   val writer: IndexWriter = makeIndexWriter
 
   def getContentIter(path: String) = Source.fromFile(path).getLines()
+
   def getContentFromUrl(url: String) = Http(url).asString.body
 
   def toDocument(event: LogEvent): Document = {
@@ -36,6 +40,7 @@ object Lucenecul extends Logging {
     // stringfield does not count frequencies and position (would always be 1 and 0)
     doc.add(new StringField("id", "doc_" + System.nanoTime(), Field.Store.YES))
     // TODO - how to store and query dates (and perhaps other non-string types like numbers or locations)
+    // translate into LongField and use numeric comparisons
     doc.add(new TextField("level", event.level, Field.Store.YES))
     doc.add(new TextField("content", event.message, Store.YES))
     doc
@@ -46,7 +51,7 @@ object Lucenecul extends Logging {
     val events: Iterator[Option[LogEvent]] = LogLineParser.makeLogEvents(iter)
     events.flatten.map(toDocument)
   }
-  
+
   def indexDocs(docs: GenTraversableOnce[Document]) = {
 
     if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
@@ -67,11 +72,11 @@ object Lucenecul extends Logging {
     val iwc: IndexWriterConfig = new IndexWriterConfig(analyzer)
     iwc.setCodec(new SimpleTextCodec())
     iwc.setUseCompoundFile(false) // separate files are better for indexing. Using the compond difle is better for searhc
+    iwc.setOpenMode(OpenMode.CREATE) //_OR_APPEND is the default value)
 
-    // commitPoints can theoretically move through history
+    // commitPoints can theoretically move through history but you have to an appropriate IndexDeletionPlicy
     // IndexDeletionPolicy - standard - deletes former commitpoints so you cant go back
 
-    iwc.setOpenMode(OpenMode.CREATE) //_OR_APPEND is the default value)
 
     new IndexWriter(dir, iwc)
   }
@@ -99,30 +104,26 @@ object Lucenecul extends Logging {
     // default is false
     parser.setLowercaseExpandedTerms(true)
 
-    // things we are missing yet - faceting, ighlighting, explaining
-
-
-
     val query: Query = parser.parse(field + ":" + value)
 
     val results: TopDocs = searcher.search(query, limit)
 
     val explain: Explanation = searcher.explain(query, limit)
-//    println(explain.getDescription)
-//    println(explain.getValue)
+    //    println(explain.getDescription)
+    //    println(explain.getValue)
     // TODO - what do I do with the details?
-//    println(explain.getDetails)
+    //    println(explain.getDetails)
     log.info(" --- scores of a query are unique to this query and are not comparable between queries --- ")
     log.info(explain.toString)
 
     val numTotalHits = results.totalHits
-    log.info(numTotalHits + " total matching documents")
+    log.info(s" found $numTotalHits total matching documents")
 
     val hits: Array[ScoreDoc] = results.scoreDocs
     hits.map(num => searcher.doc(num.doc))
   }
 
-  // hunspellfilter for spelling correctionj
+  // TODO hunspellfilter for spelling correction
 
 
   def searchTerm(field: String, value: String, limit: Int = 5) = {
@@ -132,7 +133,7 @@ object Lucenecul extends Logging {
     // you can also pass a Thread pool
     val searcher: IndexSearcher = new IndexSearcher(reader)
 
-    // WildcardQuery - runs through teh terms, and rewrites itself in terms of the matches as a BooleanQuery
+    // TODO - WildcardQuery - runs through the terms, and rewrites itself in terms of the matches as a BooleanQuery
     // leading wildcard is expensive because it has to traverse everyting
     // leading wildcards are so expensive that there is an extras setting of that - setAllwoLeadingWildcard
     val topDocs: TopDocs = searcher.search(new TermQuery(new Term("content", "milk")), 10)
@@ -144,14 +145,11 @@ object Lucenecul extends Logging {
   }
 
   def printlReaderDetails() = {
-
-    import scala.collection.JavaConversions._
-
-    val reader: IndexReader = DirectoryReader.open(dir) //FSDirectory.open(Paths.get(PATH_TO_INDEX)))
+    val reader: IndexReader = DirectoryReader.open(dir)
 
     // TODO - what can we get from those?
     val mergedFieldInfos: FieldInfos = MultiFields.getMergedFieldInfos(reader)
-    mergedFieldInfos.iterator foreach {fi => println(s"${fi.name}")}
+    mergedFieldInfos.iterator foreach { fi => println(s"${fi.name}") }
 
     // same strings as in FieldInfo.name
     val iterator: util.Iterator[String] = MultiFields.getFields(reader).iterator()
