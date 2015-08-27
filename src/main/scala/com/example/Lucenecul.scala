@@ -8,11 +8,15 @@ import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.codecs.simpletext.SimpleTextCodec
 import org.apache.lucene.document.Field.Store
-import org.apache.lucene.document.{Document, Field, StringField, TextField}
+import org.apache.lucene.document._
+import org.apache.lucene.facet.FacetsConfig
 import org.apache.lucene.index.IndexWriterConfig.OpenMode
 import org.apache.lucene.index._
+import org.apache.lucene.queries.mlt.MoreLikeThis
 import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.queryparser.classic.QueryParser.Operator
+import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser
+import org.apache.lucene.queryparser.flexible.standard.config.StandardQueryConfigHandler
 import org.apache.lucene.search._
 import org.apache.lucene.store.{Directory, FSDirectory}
 
@@ -43,6 +47,46 @@ object Lucenecul extends Logging {
     // translate into LongField and use numeric comparisons
     doc.add(new TextField("level", event.level, Field.Store.YES))
     doc.add(new TextField("content", event.message, Store.YES))
+
+    // since 5, IntFields cannot be sorted by, you will need a DocValuesField
+    doc.add(new IntField("popularity", 42, Store.YES))
+    doc.add(new NumericDocValuesField("popularity", 42)) // not stored per default
+
+    // todo - if you want faceting, you will ahve to add fields as SortedSetDocValueFacetField
+    // SSDVFF - indexes a dummy field
+
+    // faceting
+
+    val fx = new FacetsConfig
+    fx.setMultiValued("foo", true) // what does this do ?
+    // instead fo just adding the docs, use addDcument(fc.build(doc))
+
+
+
+    // SortedDocValuesField - look at the index - is it sorted?
+    // a map for each distinct value present and then mapd to the document containing this value
+    //
+
+    // DocValues (Numeric & Binary) and numeric values can be updated without reindexing
+
+    // depends on teh index codec actually, if you mod the codec to store anything o redis, you could actually cisrcumvent
+
+    // SOLR and ES ahve different faceting impls
+    // SOLR - uninverts the index at strartup time (field cache in RAM)
+    // ES
+
+    // TODO - add _all field to search in multiple fields
+    // TODO - PhraseSearcher - only quarantees the order of terms, no the literal match
+    // for phrease search to work i will need to index docs, fileds and positions
+    // PS uses TwoPhase iteration - first to determine if all terms exist, then 2nd phase - ordering
+
+// use Store.NO for the _all field - does not mean that the field is not stored. It is and you can still query it, just not retrieve from the index
+
+    // tODO adding multiple fileds with the same name jsut concatenates them
+
+    // elastic has a built-in _all field and type
+
+
     doc
   }
 
@@ -120,7 +164,8 @@ object Lucenecul extends Logging {
     log.info(s" found $numTotalHits total matching documents")
 
     val hits: Array[ScoreDoc] = results.scoreDocs
-    hits.map(num => searcher.doc(num.doc))
+//    hits.map(num => searcher.doc(num.doc))
+    results.scoreDocs
   }
 
   // TODO hunspellfilter for spelling correction
@@ -144,17 +189,111 @@ object Lucenecul extends Logging {
     }
   }
 
+  def mlt(docid: Int) = {
+
+    val reader: IndexReader = DirectoryReader.open(dir)
+    val searcher: IndexSearcher = new IndexSearcher(reader)
+
+    val mlt = new MoreLikeThis(reader)
+    val mltq = mlt.like(docid)
+
+    println("mltq: " + mltq)
+
+    searcher.search(mltq, 1)
+  }
+
+  def pagedSearch(pageNum: Int = 0, pageSize: Int = 2) = {
+
+    // TODO  search actually retruns a FieldDoc containing additional info related to the sorting of the original query.
+    // the sorting has to match between the original query and the paged search
+
+    // ScoreDoc is a simple int / float container. Can be used and reconstructed if no sorting is used
+
+
+    val reader: IndexReader = DirectoryReader.open(dir)
+    val searcher: IndexSearcher = new IndexSearcher(reader)
+
+    val all = new MatchAllDocsQuery
+
+    val topDocs: TopDocs = searcher.search(all, pageSize + pageNum*pageSize) // add page size
+
+
+    // TODO - use last found doc to page
+    // doc ids have to be stable - a merge can reqrite all ids
+//    searcher.searchAfter(doc, query, Sort.RELEVANCE, true, true)
+
+    // suppose page size is 2 and we want to have the second page
+    topDocs.scoreDocs.drop(pageNum*pageSize)
+  }
+
+  def multiSearch(fields: Set[String]) = {
+
+    val reader: IndexReader = DirectoryReader.open(dir)
+    val searcher: IndexSearcher = new IndexSearcher(reader)
+
+    // indexing and serach analyzers have to match sufficiently in order to find relevant results
+    val analyzer: Analyzer = new StandardAnalyzer()
+
+    // StandardQueryParser is the new one, ClassicQueryParser is the old one
+    val parser: StandardQueryParser = new StandardQueryParser(analyzer)
+    parser.setDefaultOperator(StandardQueryConfigHandler.Operator.AND)
+    parser.setLowercaseExpandedTerms(true)
+
+    val queries = fields map { f =>
+      parser.parse("myserachterm", f)
+    }
+    val boolBuilder = new BooleanQuery.Builder()
+
+    queries.foreach( q =>
+        boolBuilder.add(q, BooleanClause.Occur.SHOULD)
+    )
+
+  }
+
+  def multiSearch2() = {
+
+    val reader: IndexReader = DirectoryReader.open(dir)
+    val searcher: IndexSearcher = new IndexSearcher(reader)
+
+    // indexing and serach analyzers have to match sufficiently in order to find relevant results
+    val analyzer: Analyzer = new StandardAnalyzer()
+
+    // StandardQueryParser is the new one, ClassicQueryParser is the old one
+    val parser: StandardQueryParser = new StandardQueryParser(analyzer)
+    parser.setDefaultOperator(StandardQueryConfigHandler.Operator.AND)
+    parser.setLowercaseExpandedTerms(true)
+
+//    val queries = fields map { f =>
+//      parser.parse("myserachterm", f)
+//    }
+
+    // disjunction stands for OR / SHOULD
+    // difference to the boolean query is onyl the scoring
+//    val query: DisjunctionMaxQuery = new DisjunctionMaxQuery(queries, 1.0f)
+  }
+
+
   def printlReaderDetails() = {
     val reader: IndexReader = DirectoryReader.open(dir)
 
-    // TODO - what can we get from those?
+    // sth like a schema
     val mergedFieldInfos: FieldInfos = MultiFields.getMergedFieldInfos(reader)
     mergedFieldInfos.iterator foreach { fi => println(s"${fi.name}") }
 
     // same strings as in FieldInfo.name
     val iterator: util.Iterator[String] = MultiFields.getFields(reader).iterator()
     iterator foreach println
-
   }
+
+
+
+
+
+
+  // payload - accessed in the scorer, but is not searchable
+
+  // ES uses payload to boost searh results
+
+  // you need termvectors for MLT to work
 
 }
