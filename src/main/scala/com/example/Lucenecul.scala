@@ -33,12 +33,18 @@ object Lucenecul extends Logging {
   private val tempDir: Path = Files.createTempDirectory("lucene_")
   val dir: Directory = FSDirectory.open(tempDir)
   // new RAMDirectory()
+  // TODO - flush by RAM size: Call writer.setRAMBufferSizeMB()
+  // https://wiki.apache.org/lucene-java/ImproveIndexingSpeed
   val writer: IndexWriter = makeIndexWriter
+
+  val fc = new FacetsConfig
+  fc.setMultiValued("foo", true)
 
   def getContentIter(path: String) = Source.fromFile(path).getLines()
 
   def getContentFromUrl(url: String) = Http(url).asString.body
 
+  // TODO - create a single doc and reuse fields to avoid GC - https://wiki.apache.org/lucene-java/ImproveIndexingSpeed
   def toDocument(event: LogEvent): Document = {
     val doc: Document = new Document()
     // stringfield does not count frequencies and position (would always be 1 and 0)
@@ -57,8 +63,8 @@ object Lucenecul extends Logging {
 
     // faceting
 
-    val fx = new FacetsConfig
-    fx.setMultiValued("foo", true) // what does this do ?
+//    val fx = new FacetsConfig
+//    fx.setMultiValued("foo", true) // what does this do ?
     // instead fo just adding the docs, use addDcument(fc.build(doc))
 
 
@@ -85,7 +91,6 @@ object Lucenecul extends Logging {
     // tODO adding multiple fileds with the same name jsut concatenates them
 
     // elastic has a built-in _all field and type
-
 
     doc
   }
@@ -120,8 +125,6 @@ object Lucenecul extends Logging {
 
     // commitPoints can theoretically move through history but you have to an appropriate IndexDeletionPlicy
     // IndexDeletionPolicy - standard - deletes former commitpoints so you cant go back
-
-
     new IndexWriter(dir, iwc)
   }
 
@@ -153,10 +156,6 @@ object Lucenecul extends Logging {
     val results: TopDocs = searcher.search(query, limit)
 
     val explain: Explanation = searcher.explain(query, limit)
-    //    println(explain.getDescription)
-    //    println(explain.getValue)
-    // TODO - what do I do with the details?
-    //    println(explain.getDetails)
     log.info(" --- scores of a query are unique to this query and are not comparable between queries --- ")
     log.info(explain.toString)
 
