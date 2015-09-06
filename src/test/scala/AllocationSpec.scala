@@ -10,76 +10,16 @@ import org.apache.lucene.queryparser.flexible.standard.StandardQueryParser
 import org.apache.lucene.queryparser.flexible.standard.config.StandardQueryConfigHandler
 import org.apache.lucene.search._
 import org.apache.lucene.store.{Directory, FSDirectory}
-import org.scalatest._
+import org.scalatest.{BeforeAndAfter, Matchers, FunSpec}
 
 import scala.collection.JavaConverters._
 
-class LuceneculAnotherSpec extends FunSpec with Matchers with SpecHelper with BeforeAndAfter {
+class AllocationSpec extends FunSpec with Matchers with SpecHelper with BeforeAndAfter {
 
-  var ir: DirectoryReader = _
-  var is: IndexSearcher = _
-  var facConf: FacetsConfig = _
   private val tempDir: Path = Files.createTempDirectory("lucene_")
   val dir: Directory = FSDirectory.open(tempDir)
 
-  before {
-    facConf = prepareIndex
-    ir = DirectoryReader.open(dir)
-    is = new IndexSearcher(ir)
-  }
-
-  after {
-    ir.close()
-  }
-
-
-  describe("drill sideways") {
-
-     it("should do am OR / disjunction search") {
-      println("---")
-
-      val qp = new StandardQueryParser(new StandardAnalyzer())
-      qp.setDefaultOperator(StandardQueryConfigHandler.Operator.OR)
-      qp.setLowercaseExpandedTerms(true)
-
-      val fields = Set("content", "content2")
-      val queries = fields.map { field ⇒
-        qp.parse( """ipsum sit""", field)
-      }
-
-      // TODO - would this disjunction query be different?
-      // result set is same, scores are different
-      //  val q = new DisjunctionMaxQuery(queries.asJavaCollection, 1.0f)
-
-      val boolBuilder = new BooleanQuery.Builder()
-      queries foreach { q ⇒
-        boolBuilder.add(q, BooleanClause.Occur.SHOULD)
-      }
-      val q = boolBuilder.build()
-
-      var lastDoc: ScoreDoc = null
-
-      {
-        val topdocs = is.search(q, 2)
-        println(s"PAGE 1: topdocs.totalHits = ${topdocs.totalHits}, max score = ${topdocs.getMaxScore}")
-        topdocs.scoreDocs.foreach { sd ⇒
-          lastDoc = sd
-          val document: Document = is.doc(sd.doc)
-          val id: String = document.get("id")
-          println(s"id = $id, score = ${sd.score}, popularity = ${document.getField("popularity")}")
-        }
-      }
-
-      {
-        val topdocs = is.searchAfter(lastDoc, q, 2)
-        println(s"PAGE 2: topdocs.totalHits = ${topdocs.totalHits}, max score = ${topdocs.getMaxScore}")
-        topdocs.scoreDocs.foreach { sd ⇒
-          val document: Document = is.doc(sd.doc)
-          val id: String = document.get("id")
-          println(s"id = $id, score = ${sd.score}, popularity = ${document.getField("popularity")}")
-        }
-      }
-    }
+  describe("allocation strategies for exprensive resources") {
 
     // there can be only one combination of directory and indexwriter
     // indexwrier is threadsafe though and can be shared
@@ -238,7 +178,6 @@ class LuceneculAnotherSpec extends FunSpec with Matchers with SpecHelper with Be
       // similar API . very different encoding
 
     }
-
   }
 
   def prepareIndex: FacetsConfig = {
