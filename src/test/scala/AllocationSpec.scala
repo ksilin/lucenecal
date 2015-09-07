@@ -25,9 +25,10 @@ class AllocationSpec extends FunSpec with Matchers with SpecHelper with BeforeAn
     // indexwrier is threadsafe though and can be shared
     it("expensive stuffz") {
       println("---")
-      // facets config sould be reused as well
 
       // document and fields can be reused
+      // facets config should be reused as well
+
 
       // you dont want to commit and close the IWriter - should remain opened at all times,
       // but you can commit
